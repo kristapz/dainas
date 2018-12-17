@@ -4,9 +4,10 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="style.css" type="text/css">
 <script src="javascript/jquery.js" type="text/JavaScript" language="javascript"></script><script src="javascript/add_char.js" type="text/JavaScript" language="javascript"></script>
+<script src="solrSearch.js" type="text/javascript"></script>
 <title> Latviešu Tautas Dziesmas: Meklēt</title>
 </head>
-<body>
+<body onload="querySolr();">
 <table id="wrap">
 <tr>
 <td class="header">
@@ -52,8 +53,12 @@
 <p>Ieraksti meklējamo vārdu vai vārdkopu vai numuru
 											lodziņā:</p>
 <div id="searchFormContainer">
-<form method="GET" id="searchForm">
-<input value="25" name="rows" type="hidden"><input value="0" name="start" type="hidden"><input value="lav" name="lang" type="hidden"><input name="search_text" value="" id="searchText" type="text"><input value="Meklē" name="action" id="searchBtn" type="submit">
+    <form method="GET" id="searchForm">
+        <input value="25" name="rows" type="hidden">
+        <input value="0" name="start" type="hidden">
+        <input value="lav" name="lang" type="hidden">
+        <input name="searchText" value="" id="searchText" type="text">
+        <input value="Meklē" name="action" id="searchBtn" type="submit" onclick="querySolr();">
 </form>
 <select id="chars"><option>&nbsp;</option><option>ā</option><option>č</option><option>ē</option><option>ģ</option><option>ī</option><option>ķ</option><option>ļ</option><option>ņ</option><option>ō</option><option>ŗ</option><option>š</option><option>ū</option><option>ž</option></select> Latvian letters/latviešu burti </div>
 <div>
@@ -65,6 +70,11 @@
 <p>2)  Uzklikšķini uz pasvītrotā <b>nodaļas virsraksta</b> un tev pavērsies visa nodaļa, kuŗā atrodas viena vai vairākas dainas, kas satur meklēto vārdu.  Ritini lappusi uz leju;  meklētais vārds ir iekrāsots dzeltenā krāsā.</p>
 <p>3)  Uzklikšķini nodaļā uz <b>samazinātās skenētās lappuses</b> un tev pavērsies attiecīgā lappuse drukātajā grāmatā.  Lai  drukātās  lappuses tekstu palielinātu, uzklikšķini jebkur uz skenētās lapas. </p>
 </div>
+
+
+<div id="loader"></div>
+<div id="searchResult"> </div>
+
 <div id="search"></div>
 </div>
 </td>

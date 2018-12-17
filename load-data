@@ -1,0 +1,77 @@
+#!/bin/bash
+#
+# Configure a Solr demo and then run solr in the foreground
+
+set -euo pipefail
+
+if [[ "${VERBOSE:-}" = "yes" ]]; then
+    set -x
+fi
+
+. /opt/docker-solr/scripts/run-initdb
+
+# change to argument passed in through docker-compose.yml
+CORE=${1:-latcore}
+
+CORE_DIR="${SOLR_HOME:-/opt/solr/server/solr}/${CORE}"
+if [ -d "$CORE_DIR" ]; then
+  echo "$CORE_DIR exists; skipping core creation"
+else
+  # start the solr for the first time to create the core directory and files on
+  # disk
+  start-local-solr
+  echo "Creating $CORE"
+  /opt/solr/bin/solr create -c "$CORE"
+  stop-local-solr
+
+  # copy config files in place
+  echo "Copy config files"
+  cp /opt/solr/managed-schema ${CORE_DIR}/conf/managed-schema
+  cp /opt/solr/web.xml /opt/solr/server/solr-webapp/webapp/WEB-INF/web.xml
+
+  # start it up again with the new config files in place
+  start-local-solr
+
+  sleep 5 # to allow time for the solr serve to get up and running
+
+  # Load the data Either the xml files or the json, not both, and only the xml
+  # work, but keeping the other in for posterity.
+  for f in `ls /opt/solr/add_docs`; do
+    echo "Loading datafile $f"
+    /opt/solr/bin/post -c $CORE -commit yes /opt/solr/add_docs/$f
+    echo
+  done
+  # This is a dump from the old solr (using query *:*), but is missing the
+  # fulltext field, so pretty useless...
+#  /opt/solr/bin/post -c $CORE -commit yes /opt/solr/datafile.json
+
+  # stop solr again
+  stop-local-solr
+
+    # check the core_dir exists; otherwise the detecting above will fail after stop/start
+    if [ ! -d "$CORE_DIR" ]; then
+        echo "Missing $CORE_DIR"
+        exit 1
+    fi
+fi
+
+echo "Restart Solr with edited config files and data loaded!"
+echo "Let's rock this thing!"
+
+
+cat << "EOF"
+                        _    ,-,    _
+                 ,--, /: :\/': :`\/: :\
+                |`;  ' `,'   `.;    `: |
+                |    |     |  '  |     |.
+                | R  |  O  |  C  |  K  ||
+                | :. |  :  |  :  |  :  | \
+                 \__/: :.. : :.. | :.. |  )
+                      `---',\___/,\___/ /'
+                           `==._ .. . /'
+                                `-::-'
+
+
+EOF
+
+exec solr -f

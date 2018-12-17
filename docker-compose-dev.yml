@@ -1,0 +1,48 @@
+version: '2'
+services:
+  latvian_solr:
+    image: solr:7
+    container_name: latvian_solr
+    restart: always
+    volumes:
+      - ./web.xml:/opt/solr/web.xml
+      - ./managed-schema:/opt/solr/managed-schema
+      - ./load-data:/opt/docker-solr/scripts/load-data
+      # The next two lines add the data files to the container. The json file
+      # is the dump from the old solr (using the query *:*), the add_docs
+      # folder has xml files from the old site that were used to build the
+      # index originally. Only one data source can be used at a time (set in
+      # the load-data script), but it costs nothing to just add both of them
+      # into the container. The json file does not have the fulltext field, so
+      # it's pretty useless...
+      - ./add_docs:/opt/solr/add_docs
+      - ./datafile.json:/opt/solr/datafile.json
+    entrypoint:
+      - docker-entrypoint.sh
+      - load-data
+      - latcore
+    ports:
+      - 8983:8983
+    labels:
+      - "traefik.enable=false"
+
+  latvian_static:
+    image: nginx:1.15.7
+    container_name: latvian_static
+    depends_on:
+      - latvian_solr
+    restart: always
+    volumes:
+      - ./static-content:/usr/share/nginx/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=thenetwork"
+      - "traefik.port=80"
+      - "traefik.backend=latvian_static"
+      - "traefik.frontend.rule=Host:latviandainas.lib.virginia.edu"
+
+networks:
+  default:
+    external:
+      name: thenetwork

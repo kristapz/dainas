@@ -4,9 +4,10 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="style.css" type="text/css">
 <script src="javascript/jquery.js" type="text/JavaScript" language="javascript"></script><script src="javascript/add_char.js" type="text/JavaScript" language="javascript"></script>
+<script src="solrSearch.js" type="text/javascript"></script>
 <title> Latviešu Tautas Dziesmas: Search</title>
 </head>
-<body>
+<body onload="querySolr();">
 <table id="wrap">
 <tr>
 <td class="header">
@@ -24,12 +25,14 @@
 <tr>
 <td style="padding-left:303px"><a href="search%3Flang=eng.html"><img src="images/us.gif"></a></td><td style="padding-right:315px"><a href="search%3Flang=lav.html"><img src="images/lv.gif"></a></td>
 </tr>
+
 </table>
 </td>
 </tr>
 <tr>
 <td class="content">
 <div>
+<div id="searchSection">
 <h2>Search</h2>
 <p>Four types of searches are possible:</p>
 <p>1) You can search on a particular word to find which
@@ -55,10 +58,31 @@
 												<i>daina</i>.</p>
 <p>Search for a word or a phrase or a number:</p>
 <div id="searchFormContainer">
-<form method="GET" id="searchForm">
-<input value="25" name="rows" type="hidden"><input value="0" name="start" type="hidden"><input value="eng" name="lang" type="hidden"><input name="search_text" value="" id="searchText" type="text"><input value="Submit" name="action" id="searchBtn" type="submit">
-</form>
-<select id="chars"><option>&nbsp;</option><option>ā</option><option>č</option><option>ē</option><option>ģ</option><option>ī</option><option>ķ</option><option>ļ</option><option>ņ</option><option>ō</option><option>ŗ</option><option>š</option><option>ū</option><option>ž</option></select> Latvian letters/latviešu burti </div>
+    <form method="GET" id="searchForm">
+        <input value="25" name="rows" type="hidden">
+        <input value="0" name="start" type="hidden">
+        <input value="eng" name="lang" type="hidden">
+        <input name="searchText" value="" id="searchText" type="text">
+        <input value="Submit" name="action" id="searchBtn" type="submit"
+        onclick="querySolr();">
+    </form>
+    <select id="chars">
+        <option>&nbsp;</option>
+        <option>ā</option>
+        <option>č</option>
+        <option>ē</option>
+        <option>ģ</option>
+        <option>ī</option>
+        <option>ķ</option>
+        <option>ļ</option>
+        <option>ņ</option>
+        <option>ō</option>
+        <option>ŗ</option>
+        <option>š</option>
+        <option>ū</option>
+        <option>ž</option>
+    </select> Latvian letters/latviešu burti 
+</div>
 <div>
 <p>
 <b>Please scroll down to the see the search results.</b>
@@ -80,7 +104,15 @@
 												anywhere on the page image.</p>
 </p>
 </div>
-<div id="search"></div>
+
+</div><!-- search section -->
+
+
+<div id="loader"></div>
+<div id="searchResult"> </div>
+
+
+
 </div>
 </td>
 </tr>
