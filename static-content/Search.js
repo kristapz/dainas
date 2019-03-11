@@ -1,8 +1,4 @@
-
-
-//const query = 'http://faulkner.lib.virginia.edu:8899/solr/fcore/select?df=fulltext&rows=2000&fq=type:transcription&q=fulltext:lawn'
-//const theURL = 'http://latviandainas.lib.virginia.edu:8983/solr/latcore/select?df=fulltext&rows=80000&'
-const theURL = 'http://latviandainas.lib.virginia.edu:8983/solr/latcore/select?rows=80000&'
+const theURL = 'https://latviandainas.lib.virginia.edu/solr/latcore/select?rows=80000&'
 
 
 function xhrSuccess() { 

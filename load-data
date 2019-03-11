@@ -74,4 +74,16 @@ cat << "EOF"
 
 EOF
 
+cd /opt/solr/server/etc
+# get the local IP (docker container) to use in the self-signed SSL cert
+theIP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
+echo "Set up a local SSL cert"
+keytool -genkeypair -alias solr-ssl -keyalg RSA -keysize 2048 \
+  -keypass LatvianDainas -storepass LatvianDainas \
+  -validity 9999 -keystore /opt/solr/server/etc/solr-ssl.keystore.jks \
+  -ext SAN=DNS:localhost,IP:127.0.0.1,IP:$theIP \
+  -dname "CN=localhost, OU=Scholars' Lab, O=University of Virginia, L=Charlottesville, ST=VA, C=US"
+
+cp /opt/solr/solr.in.sh /opt/solr/bin/solr.in.sh
+
 exec solr -f

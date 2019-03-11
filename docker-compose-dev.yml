@@ -8,6 +8,7 @@ services:
       - ./web.xml:/opt/solr/web.xml
       - ./managed-schema:/opt/solr/managed-schema
       - ./load-data:/opt/docker-solr/scripts/load-data
+      - ./solr.in.sh:/opt/solr/solr.in.sh
       # The next two lines add the data files to the container. The json file
       # is the dump from the old solr (using the query *:*), the add_docs
       # folder has xml files from the old site that were used to build the
@@ -21,8 +22,8 @@ services:
       - docker-entrypoint.sh
       - load-data
       - latcore
-    ports:
-      - 8983:8983
+    expose:
+      - "8983"
     labels:
       - "traefik.enable=false"
 
