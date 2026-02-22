@@ -1,6 +1,7 @@
 import csv
 import math
 import os
+from datetime import date
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -57,6 +58,215 @@ KEYWORD_CATEGORY_MAP = {
     "maize": ["Food"],
 }
 
+# --- Solar calendar ---
+
+SOLAR_SEASONS = [
+    {
+        "name": "Ziemas saulgrieži",
+        "name_en": "Winter Solstice",
+        "start": (12, 21),
+        "end": (2, 1),
+        "theme": "Darkness yields. The sun returns. Objects of fire and hearth.",
+    },
+    {
+        "name": "Meteņi",
+        "name_en": "Awakening",
+        "start": (2, 2),
+        "end": (3, 24),
+        "theme": "The earth stirs beneath snow. Objects of patience and anticipation.",
+    },
+    {
+        "name": "Lieldienas",
+        "name_en": "Spring Equinox",
+        "start": (3, 25),
+        "end": (5, 14),
+        "theme": "Balance of light and dark. Objects of renewal and egg-shaped forms.",
+    },
+    {
+        "name": "Vasaras saulgrieži",
+        "name_en": "Midsummer",
+        "start": (5, 15),
+        "end": (8, 1),
+        "theme": "Maximum light. The sun does not set. Objects of oak and fire.",
+    },
+    {
+        "name": "Apjumības",
+        "name_en": "Harvest",
+        "start": (8, 2),
+        "end": (9, 22),
+        "theme": "The grain is cut. Objects of abundance and gratitude.",
+    },
+    {
+        "name": "Rudens saulgrieži",
+        "name_en": "Autumn Equinox",
+        "start": (9, 23),
+        "end": (11, 1),
+        "theme": "Light retreats. Objects of preservation and amber.",
+    },
+    {
+        "name": "Veļu laiks",
+        "name_en": "Ancestor Time",
+        "start": (11, 2),
+        "end": (12, 20),
+        "theme": "The veil thins. Objects of remembrance and lineage.",
+    },
+]
+
+
+def _current_season():
+    today = date.today()
+    m, d = today.month, today.day
+    for season in SOLAR_SEASONS:
+        sm, sd = season["start"]
+        em, ed = season["end"]
+        if sm > em:  # wraps around year (winter solstice)
+            if (m > sm) or (m == sm and d >= sd) or (m < em) or (m == em and d <= ed):
+                return season
+        else:
+            if (m > sm or (m == sm and d >= sd)) and (m < em or (m == em and d <= ed)):
+                return season
+    return SOLAR_SEASONS[0]
+
+
+# --- Curated dainas ---
+
+FEATURED_DAINAS = [
+    {
+        "latvian": "Lec, saulīte, drīz augšā,\nNelaid' gaŗu ceļmalīti;\nBārenīši ceļu gāja,\nTiem bij gaŗš ceļmalīts.",
+        "english": "Rise quickly, little sun,\nDo not leave a long twilight;\nOrphans walk the road,\nAnd for them the way is long.",
+        "source": "Kr. Barona Dainu skapis, 33566",
+        "theme": "saule",
+    },
+    {
+        "latvian": "Meitu māte linus sēja\nSudrablinu tīrumā;\nDievs dod meitu māmiņai\nSudrabiņa vedekliņu.",
+        "english": "The mother of daughters sowed flax\nIn the field of silver linen;\nGod grant the mother of daughters\nA daughter-in-law of silver.",
+        "source": "Kr. Barona Dainu skapis, 15900",
+        "theme": "lini",
+    },
+    {
+        "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
+        "english": "The smith forged in the sky,\nEmbers fell into the Daugava;\nFrom those embers the river\nBloomed with golden flowers.",
+        "source": "Kr. Barona Dainu skapis, 34067",
+        "theme": "uguns",
+    },
+    {
+        "latvian": "Saulīt' auda audekliņu\nDeviņiem dzīpariņiem;\nTrīs dzīpari zelta bija,\nSeši vaŗa dzenītiņi.",
+        "english": "The sun wove a cloth\nOf nine fine threads;\nThree threads were golden,\nSix were copper heddles.",
+        "source": "Kr. Barona Dainu skapis, 33998",
+        "theme": "audums",
+    },
+    {
+        "latvian": "Ozols auga uz akmeņa,\nSaknes laida pa ūdeni;\nNe ozolam saules trūka,\nNe sakņu pie ūdentiņa.",
+        "english": "An oak grew upon a stone,\nIts roots spread through the water;\nThe oak lacked neither sun\nNor roots beside the water.",
+        "source": "Kr. Barona Dainu skapis, 35784",
+        "theme": "ozols",
+    },
+    {
+        "latvian": "Jūra prasa dvēselīti,\nEs jūrai nedošu;\nLabāk iešu siliņā,\nOzolā pakaršos.",
+        "english": "The sea asks for my soul,\nI will not give it to the sea;\nBetter I go to the pine grove\nAnd hang myself on an oak.",
+        "source": "Kr. Barona Dainu skapis, 27444",
+        "theme": "jūra",
+    },
+]
+
+# --- Curated objects ---
+
+CURATED_OBJECTS = [
+    {
+        "name": "Solar Vessel",
+        "price": 300,
+        "description": "Hand-thrown red clay pot. Wood-fired in a rural Vidzeme kiln. "
+        "The surface carries marks of direct flame. "
+        "Paired with a midsummer daina referencing the sun crossing water.",
+        "category": "Ceramics",
+        "artisan": "Vaidava Ceramics",
+        "location": "Vaidava, Vidzeme",
+        "daina": {
+            "latvian": "Lec, saulīte, drīz augšā,\nNelaid' gaŗu ceļmalīti;\nBārenīši ceļu gāja,\nTiem bij gaŗš ceļmalīts.",
+            "english": "Rise quickly, little sun, / Do not leave a long twilight.",
+            "source": "Kr. Barona Dainu skapis, 33566",
+        },
+    },
+    {
+        "name": "Nine-Thread Cloth",
+        "price": 240,
+        "description": "Hand-woven linen cloth on a restored 1930s loom. "
+        "Natural plant dyes. Geometric sun pattern. "
+        "Paired with a daina of the sun weaving cloth of nine threads.",
+        "category": "Textiles",
+        "artisan": "ETMO Gallery",
+        "location": "Riga",
+        "daina": {
+            "latvian": "Saulīt' auda audekliņu\nDeviņiem dzīpariņiem;\nTrīs dzīpari zelta bija,\nSeši vaŗa dzenītiņi.",
+            "english": "The sun wove a cloth / Of nine fine threads.",
+            "source": "Kr. Barona Dainu skapis, 33998",
+        },
+    },
+    {
+        "name": "Sky-Forge Brooch",
+        "price": 185,
+        "description": "Hand-cast bronze sakta in the form of the solar cross. "
+        "Finished with patina. Based on 9th-century Latgalian originals. "
+        "Paired with a daina of the celestial smith.",
+        "category": "Metalwork",
+        "artisan": "Baltu Rotas",
+        "location": "Sigulda, Vidzeme",
+        "daina": {
+            "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
+            "english": "The smith forged in the sky, / Embers fell into the Daugava.",
+            "source": "Kr. Barona Dainu skapis, 34067",
+        },
+    },
+    {
+        "name": "Silver-Linen Belt",
+        "price": 160,
+        "description": "Woven josta using traditional Latvian geometric patterns. "
+        "Wool and linen. Width follows ethnographic proportions. "
+        "Paired with a daina of flax sown in a silver field.",
+        "category": "Textiles",
+        "artisan": "Senā Klēts",
+        "location": "Riga",
+        "daina": {
+            "latvian": "Meitu māte linus sēja\nSudrablinu tīrumā;\nDievs dod meitu māmiņai\nSudrabiņa vedekliņu.",
+            "english": "The mother of daughters sowed flax / In the field of silver linen.",
+            "source": "Kr. Barona Dainu skapis, 15900",
+        },
+    },
+    {
+        "name": "Oak-Root Board",
+        "price": 120,
+        "description": "Bread board carved from Latvian oak. "
+        "Hand-finished with beeswax. The grain follows the tree's growth. "
+        "Paired with a daina of the oak growing on stone.",
+        "category": "Woodwork",
+        "artisan": "BAWOOD",
+        "location": "Launkalne, Latvia",
+        "daina": {
+            "latvian": "Ozols auga uz akmeņa,\nSaknes laida pa ūdeni;\nNe ozolam saules trūka,\nNe sakņu pie ūdentiņa.",
+            "english": "An oak grew upon a stone, / Its roots spread through the water.",
+            "source": "Kr. Barona Dainu skapis, 35784",
+        },
+    },
+    {
+        "name": "Ember Ring",
+        "price": 95,
+        "description": "Forged iron ring with copper inlay. "
+        "Made at a rural forge using traditional bellows. "
+        "Paired with a daina of the smith who forges in the heavens.",
+        "category": "Metalwork",
+        "artisan": "Sun Hill Forge",
+        "location": "Northern Latvia",
+        "daina": {
+            "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
+            "english": "The smith forged in the sky, / Embers fell into the Daugava.",
+            "source": "Kr. Barona Dainu skapis, 34067",
+        },
+    },
+]
+
+
+# --- Helpers ---
+
 
 def _first(value):
     if isinstance(value, list):
@@ -94,7 +304,7 @@ def _snippet(text, limit=260):
     text = (text or "").strip()
     if len(text) <= limit:
         return text
-    return text[: limit - 1].rstrip() + "…"
+    return text[: limit - 1].rstrip() + "\u2026"
 
 
 def _normalize_doc(doc):
@@ -191,6 +401,11 @@ def _load_artisans(path):
 
 ARTISANS = _load_artisans(ARTISAN_DATA_PATH)
 
+# Featured artisans for the landing page (real artisans who make craft objects)
+FEATURED_ARTISANS = [a for a in ARTISANS if a["category"] in (
+    "Pottery", "Textiles", "Metalwork/Jewelry", "Metalwork/Blacksmith", "Woodwork"
+) and a["ships_flag"]]
+
 
 def _filter_artisans(artisans, query, category, region, shipping):
     query = (query or "").strip().lower()
@@ -244,7 +459,22 @@ def _suggested_categories(query):
     return found
 
 
+# --- Routes ---
+
+
 @app.get("/")
+def index():
+    season = _current_season()
+    return render_template(
+        "index.html",
+        season=season,
+        dainas=FEATURED_DAINAS,
+        objects=CURATED_OBJECTS,
+        artisans=FEATURED_ARTISANS[:12],
+    )
+
+
+@app.get("/search")
 def search():
     q = request.args.get("q", "").strip()
     volume_id = request.args.get("volume_id")

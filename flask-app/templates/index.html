@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Solar Order</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+
+    <nav class="nav">
+      <a href="/" class="nav__logo">Solar Order</a>
+      <div class="nav__links">
+        <a href="#objects">Objects</a>
+        <a href="#dainas">Dainas</a>
+        <a href="#makers">Makers</a>
+        <a href="/search">Archive</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="hero__inner">
+        <div class="hero__sun"></div>
+        <p class="hero__kicker">A sovereign Baltic cultural export layer</p>
+        <h1 class="hero__title">Solar Order</h1>
+        <p class="hero__subtitle">
+          Curated Latvian craft objects rooted in documented Baltic symbolism.
+          Each piece is paired with a cited daina fragment and framed within
+          a solar, land-bound, cyclical cosmology.
+        </p>
+        <div class="hero__rule"></div>
+        <p class="hero__credo">
+          Craft over industry. Cyclical time over linear progress.
+          Immanence over transcendence.
+        </p>
+      </div>
+    </header>
+
+    <section class="season">
+      <div class="container">
+        <div class="season__inner">
+          <span class="season__label">Current Season</span>
+          <span class="season__name">{{ season.name }}</span>
+          <span class="season__divider">/</span>
+          <span class="season__name-en">{{ season.name_en }}</span>
+        </div>
+        <p class="season__theme">{{ season.theme }}</p>
+      </div>
+    </section>
+
+    <div class="divider"><div class="container"><hr /></div></div>
+
+    <section id="objects" class="section">
+      <div class="container">
+        <div class="section__header">
+          <span class="section__kicker">Curated</span>
+          <h2 class="section__title">Objects</h2>
+          <p class="section__desc">
+            Limited, heirloom-level objects from Latvian artisans.
+            Each paired with a specific daina from the Kr. Barona collection.
+          </p>
+        </div>
+
+        <div class="objects-grid">
+          {% for obj in objects %}
+          <article class="object-card">
+            <div class="object-card__visual">
+              <span class="object-card__category">{{ obj.category }}</span>
+            </div>
+            <div class="object-card__body">
+              <h3 class="object-card__name">{{ obj.name }}</h3>
+              <p class="object-card__price">${{ obj.price }}</p>
+              <p class="object-card__desc">{{ obj.description }}</p>
+              <div class="object-card__daina">
+                <p class="object-card__daina-text">{{ obj.daina.english }}</p>
+                <span class="object-card__daina-source">{{ obj.daina.source }}</span>
+              </div>
+              <div class="object-card__maker">
+                <span>{{ obj.artisan }}</span>
+                <span class="object-card__location">{{ obj.location }}</span>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"><div class="container"><hr /></div></div>
+
+    <section id="dainas" class="section">
+      <div class="container">
+        <div class="section__header">
+          <span class="section__kicker">From the collection of Kr. Barons</span>
+          <h2 class="section__title">Selected Dainas</h2>
+          <p class="section__desc">
+            The Latvian dainas are an oral tradition of over 200,000 folk songs.
+            Collected by Krišjānis Barons in the late 19th century, they encode
+            a complete pre-Christian cosmology of sun, earth, and cyclical time.
+          </p>
+        </div>
+
+        <div class="dainas-list">
+          {% for daina in dainas %}
+          <article class="daina-card">
+            <div class="daina-card__latvian">
+              {{ daina.latvian | replace('\n', '<br>') | safe }}
+            </div>
+            <div class="daina-card__english">
+              {{ daina.english | replace('\n', '<br>') | safe }}
+            </div>
+            <footer class="daina-card__footer">
+              <span class="daina-card__source">{{ daina.source }}</span>
+            </footer>
+          </article>
+          {% endfor %}
+        </div>
+
+        <div class="dainas-cta">
+          <a href="/search" class="btn">Search the full archive</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"><div class="container"><hr /></div></div>
+
+    <section id="makers" class="section">
+      <div class="container">
+        <div class="section__header">
+          <span class="section__kicker">Latvian workshops</span>
+          <h2 class="section__title">Makers</h2>
+          <p class="section__desc">
+            Every object originates from a documented Latvian artisan.
+            Studios, workshops, and cooperatives maintaining material traditions.
+          </p>
+        </div>
+
+        <div class="makers-grid">
+          {% for artisan in artisans %}
+          <article class="maker-card">
+            <h3 class="maker-card__name">{{ artisan.name }}</h3>
+            <p class="maker-card__category">{{ artisan.sub_category or artisan.category }}</p>
+            <p class="maker-card__location">{{ artisan.location }}</p>
+            <div class="maker-card__links">
+              {% if artisan.website %}
+                <a href="{{ artisan.website }}" target="_blank" rel="noopener">Site</a>
+              {% endif %}
+              {% if artisan.etsy %}
+                <a href="{{ artisan.etsy }}" target="_blank" rel="noopener">Etsy</a>
+              {% endif %}
+              {% if artisan.instagram %}
+                <a href="https://instagram.com/{{ artisan.instagram | replace('@','') }}" target="_blank" rel="noopener">Instagram</a>
+              {% endif %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"><div class="container"><hr /></div></div>
+
+    <section class="section section--philosophy">
+      <div class="container">
+        <div class="philosophy">
+          <h2 class="philosophy__title">Position</h2>
+          <div class="philosophy__text">
+            <p>
+              Re-centering pre-Christian Baltic cosmology through disciplined modern design.
+              Replacing abstract consumption with land-rooted objects.
+            </p>
+            <p>
+              Each object carries documented lineage: the artisan who made it,
+              the region it comes from, the daina that accompanies it,
+              and the solar season in which it is offered.
+            </p>
+            <p>
+              This is not a shop. It is a cultural export layer.
+              A disciplined aesthetic system. A marketplace functioning as modern solar canon.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__inner">
+          <div class="footer__brand">
+            <span class="footer__logo">Solar Order</span>
+            <span class="footer__origin">Riga, Latvia</span>
+          </div>
+          <div class="footer__links">
+            <a href="#objects">Objects</a>
+            <a href="#dainas">Dainas</a>
+            <a href="#makers">Makers</a>
+            <a href="/search">Archive</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

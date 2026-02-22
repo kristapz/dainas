@@ -3,242 +3,223 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Latvian Dainas + Artisan Sourcing</title>
+    <title>Archive / Solar Order</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
-    <div class="page">
-      <header class="hero">
-        <div class="hero__ribbon">Authentic Latvian craft sourcing • Dainas as cultural context</div>
-        <div class="hero__top">
-          <div>
-            <p class="eyebrow">Latvian Dainas + Craft</p>
-            <h1>Search the Dainas, source the makers</h1>
-            <p class="lede">
-              Explore the living craft tradition behind the songs. Find dainas by theme,
-              then connect to Latvian artisans whose work carries that heritage into today.
-            </p>
-          </div>
-          <div class="hero__stats">
-            <div class="stat">
-              <span class="stat__label">Dainas</span>
-              <span class="stat__value">{{ num_found }}</span>
-            </div>
-            <div class="stat">
-              <span class="stat__label">Artisans</span>
-              <span class="stat__value">{{ artisans | length }}</span>
-            </div>
-          </div>
+
+    <nav class="nav">
+      <a href="/" class="nav__logo">Solar Order</a>
+      <div class="nav__links">
+        <a href="/#objects">Objects</a>
+        <a href="/#dainas">Dainas</a>
+        <a href="/#makers">Makers</a>
+        <a href="/search">Archive</a>
+      </div>
+    </nav>
+
+    <div class="search-page">
+      <div class="search-hero">
+        <h1>Daina Archive</h1>
+        <p>
+          Full-text search across the Kr. Barona dainu skapis.
+          Filter by volume, theme, or craft tradition.
+        </p>
+      </div>
+
+      <form class="search-form" method="get" action="/search">
+        <div class="search-form__field">
+          <label for="q">Search dainas</label>
+          <input
+            id="q"
+            type="search"
+            name="q"
+            placeholder="saule, māte, zvaigzne, lina"
+            value="{{ q }}"
+            autocomplete="off"
+          />
         </div>
 
-        <form class="search" method="get" action="/">
-          <div class="search__field">
-            <label for="q">Search dainas</label>
-            <input
-              id="q"
-              type="search"
-              name="q"
-              placeholder="Try: saule, māte, zvaigzne, lina"
-              value="{{ q }}"
-              autocomplete="off"
-            />
-          </div>
-
-          <div class="search__field">
-            <label for="rows">Results per page</label>
-            <select id="rows" name="rows">
-              {% for size in [25, 50, 100, 200] %}
-                <option value="{{ size }}" {% if rows == size %}selected{% endif %}>{{ size }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="search__field">
-            <label for="craft_category">Craft category</label>
-            <select id="craft_category" name="craft_category">
-              <option value="">All categories</option>
-              {% for category in artisan_categories %}
-                <option value="{{ category }}" {% if craft_category == category %}selected{% endif %}>{{ category }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="search__field">
-            <label for="craft_region">Region</label>
-            <select id="craft_region" name="craft_region">
-              <option value="">All regions</option>
-              {% for region in artisan_regions %}
-                <option value="{{ region }}" {% if craft_region == region %}selected{% endif %}>{{ region }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="search__field">
-            <label for="craft_shipping">Ships internationally</label>
-            <select id="craft_shipping" name="craft_shipping">
-              <option value="">All</option>
-              <option value="yes" {% if craft_shipping == 'yes' %}selected{% endif %}>Yes only</option>
-            </select>
-          </div>
-
-          {% if base_args.volume_id %}<input type="hidden" name="volume_id" value="{{ base_args.volume_id }}" />{% endif %}
-
-          <button type="submit">Search</button>
-        </form>
-
-        <div class="filters-bar">
-          <div class="filters-bar__label">Active filters</div>
-          <div class="chips">
-            {% if base_args.volume_id %}
-              <a class="chip" href="/?{{ query_string(base_args, volume_id=None, page=1) }}">
-                Volume {{ volume_roman.get(base_args.volume_id, base_args.volume_id) }}
-                <span aria-hidden="true">×</span>
-              </a>
-            {% endif %}
-            {% if craft_category %}
-              <a class="chip" href="/?{{ query_string(base_args, craft_category=None, page=1) }}">
-                {{ craft_category }}
-                <span aria-hidden="true">×</span>
-              </a>
-            {% endif %}
-            {% if craft_region %}
-              <a class="chip" href="/?{{ query_string(base_args, craft_region=None, page=1) }}">
-                {{ craft_region }}
-                <span aria-hidden="true">×</span>
-              </a>
-            {% endif %}
-            {% if craft_shipping == 'yes' %}
-              <a class="chip" href="/?{{ query_string(base_args, craft_shipping=None, page=1) }}">
-                Ships internationally
-                <span aria-hidden="true">×</span>
-              </a>
-            {% endif %}
-            {% if not base_args.volume_id and not craft_category and not craft_region and not craft_shipping %}
-              <span class="muted">None</span>
-            {% endif %}
-          </div>
-          <a class="clear" href="/?{{ query_string({'q': q, 'rows': rows}) }}">Clear all</a>
+        <div class="search-form__field">
+          <label for="rows">Per page</label>
+          <select id="rows" name="rows">
+            {% for size in [25, 50, 100, 200] %}
+              <option value="{{ size }}" {% if rows == size %}selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
         </div>
 
-        {% if suggested_categories %}
-          <div class="suggestions">
-            <span>Suggested crafts for this query:</span>
-            <div class="chips">
-              {% for category in suggested_categories %}
-                <a class="chip" href="/?{{ query_string(base_args, craft_category=category, page=1) }}">{{ category }}</a>
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
+        <div class="search-form__field">
+          <label for="craft_category">Craft</label>
+          <select id="craft_category" name="craft_category">
+            <option value="">All categories</option>
+            {% for category in artisan_categories %}
+              <option value="{{ category }}" {% if craft_category == category %}selected{% endif %}>{{ category }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-        {% if error %}
-          <div class="error">{{ error }}</div>
-        {% endif %}
-      </header>
+        <div class="search-form__field">
+          <label for="craft_region">Region</label>
+          <select id="craft_region" name="craft_region">
+            <option value="">All regions</option>
+            {% for region in artisan_regions %}
+              <option value="{{ region }}" {% if craft_region == region %}selected{% endif %}>{{ region }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-      <main class="layout">
-        <aside class="filters">
-          <div class="filters__section">
-            <div class="filters__title">Volume filter</div>
-            <div class="filters__list">
-              {% for value, count in facets.volume_id %}
-                <a
-                  class="filter-item {% if base_args.volume_id == value %}is-active{% endif %}"
-                  href="/?{{ query_string(base_args, volume_id=value, page=1) }}"
-                >
-                  <span>Volume {{ volume_roman.get(value, value) }}</span>
-                  <span class="count">{{ count }}</span>
-                </a>
-              {% else %}
-                <span class="muted">No volume facets.</span>
-              {% endfor %}
-            </div>
+        <div class="search-form__field">
+          <label for="craft_shipping">Ships intl.</label>
+          <select id="craft_shipping" name="craft_shipping">
+            <option value="">All</option>
+            <option value="yes" {% if craft_shipping == 'yes' %}selected{% endif %}>Yes</option>
+          </select>
+        </div>
+
+        {% if base_args.volume_id %}<input type="hidden" name="volume_id" value="{{ base_args.volume_id }}" />{% endif %}
+
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="search-filters">
+        <span class="search-filters__label">Filters</span>
+        {% if base_args.volume_id %}
+          <a class="search-chip" href="/search?{{ query_string(base_args, volume_id=None, page=1) }}">
+            Volume {{ volume_roman.get(base_args.volume_id, base_args.volume_id) }}
+            <span aria-hidden="true">&times;</span>
+          </a>
+        {% endif %}
+        {% if craft_category %}
+          <a class="search-chip" href="/search?{{ query_string(base_args, craft_category=None, page=1) }}">
+            {{ craft_category }}
+            <span aria-hidden="true">&times;</span>
+          </a>
+        {% endif %}
+        {% if craft_region %}
+          <a class="search-chip" href="/search?{{ query_string(base_args, craft_region=None, page=1) }}">
+            {{ craft_region }}
+            <span aria-hidden="true">&times;</span>
+          </a>
+        {% endif %}
+        {% if craft_shipping == 'yes' %}
+          <a class="search-chip" href="/search?{{ query_string(base_args, craft_shipping=None, page=1) }}">
+            Ships intl.
+            <span aria-hidden="true">&times;</span>
+          </a>
+        {% endif %}
+        {% if base_args.volume_id or craft_category or craft_region or craft_shipping %}
+          <a class="search-clear" href="/search?{{ query_string({'q': q, 'rows': rows}) }}">Clear</a>
+        {% endif %}
+      </div>
+
+      {% if suggested_categories %}
+        <div class="search-suggestions">
+          <span>Suggested crafts:</span>
+          {% for category in suggested_categories %}
+            <a class="search-chip" href="/search?{{ query_string(base_args, craft_category=category, page=1) }}">{{ category }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if error %}
+        <div class="search-error">{{ error }}</div>
+      {% endif %}
+
+      <div class="search-layout">
+        <aside>
+          <div class="search-sidebar__title">Volumes</div>
+          <div class="search-volume-list">
+            {% for value, count in facets.volume_id %}
+              <a
+                class="search-volume-item {% if base_args.volume_id == value %}is-active{% endif %}"
+                href="/search?{{ query_string(base_args, volume_id=value, page=1) }}"
+              >
+                <span>Vol. {{ volume_roman.get(value, value) }}</span>
+                <span class="search-volume-count">{{ count }}</span>
+              </a>
+            {% else %}
+              <span style="font-size: 0.85rem; color: var(--fg-muted);">No facets available.</span>
+            {% endfor %}
           </div>
         </aside>
 
-        <section class="results">
-          <div class="section">
-            <div class="section__header">
-              <h2>Daina results</h2>
-              <span class="section__meta">{{ num_found }} matches</span>
-            </div>
-            {% if docs %}
-              {% for doc in docs %}
-                <article class="result">
-                  <div class="result__header">
-                    <div>
-                      <div class="result__meta">
-                        <span class="pill">Volume {{ volume_roman.get(doc.get('volume_id', ''), doc.get('volume_id', '')) }}</span>
-                        <span class="pill">{{ doc.get('lg_head', '').strip() }}</span>
-                        <span class="pill">{{ doc.get('id', '') }}</span>
-                      </div>
-                      <h3 class="result__title">
-                        <a href="{{ doc_link(doc) }}" target="_blank" rel="noopener">
-                          {{ doc.get('parent_head', 'Untitled section') }}
-                        </a>
-                      </h3>
-                    </div>
-                    <a class="open" href="{{ doc_link(doc) }}" target="_blank" rel="noopener">Open</a>
-                  </div>
-                  <p class="result__snippet">{{ doc.get('snippet', '') | safe }}</p>
-                </article>
-              {% endfor %}
-            {% else %}
-              <div class="empty">
-                <h3>No dainas found.</h3>
-                <p>Try a shorter query or remove a filter.</p>
-              </div>
-            {% endif %}
-
-            <div class="pagination">
-              <a
-                class="pager"
-                href="/?{{ query_string(base_args, page=(page - 1)) }}"
-                aria-disabled="{{ 'true' if page <= 1 else 'false' }}"
-              >Previous</a>
-              <span>Page {{ page }} of {{ total_pages }}</span>
-              <a
-                class="pager"
-                href="/?{{ query_string(base_args, page=(page + 1)) }}"
-                aria-disabled="{{ 'true' if page >= total_pages else 'false' }}"
-              >Next</a>
-            </div>
+        <div class="search-results">
+          <div class="search-results__header">
+            <h2>Results</h2>
+            <span class="search-results__meta">{{ num_found }} dainas</span>
           </div>
 
-          <div class="section">
-            <div class="section__header">
-              <h2>Artisan sourcing directory</h2>
-              <span class="section__meta">{{ artisans | length }} makers</span>
+          {% if docs %}
+            {% for doc in docs %}
+              <article class="search-result">
+                <div class="search-result__header">
+                  <div>
+                    <div class="search-result__meta">
+                      <span class="search-pill">Vol. {{ volume_roman.get(doc.get('volume_id', ''), doc.get('volume_id', '')) }}</span>
+                      <span class="search-pill">{{ doc.get('lg_head', '').strip() }}</span>
+                      <span class="search-pill">{{ doc.get('id', '') }}</span>
+                    </div>
+                    <h3 class="search-result__title">
+                      <a href="{{ doc_link(doc) }}" target="_blank" rel="noopener">
+                        {{ doc.get('parent_head', 'Untitled section') }}
+                      </a>
+                    </h3>
+                  </div>
+                  <a class="search-result__open" href="{{ doc_link(doc) }}" target="_blank" rel="noopener">Open</a>
+                </div>
+                <p class="search-result__snippet">{{ doc.get('snippet', '') | safe }}</p>
+              </article>
+            {% endfor %}
+          {% else %}
+            <div class="search-empty">
+              <h3>No dainas found</h3>
+              <p>Try a different query or remove a filter.</p>
             </div>
-            <p class="section__lede">
-              Use the filters above to surface makers connected to the themes in your daina search.
-              Every entry is a Latvian workshop, studio, or cooperative with a public presence.
-            </p>
+          {% endif %}
+
+          <div class="search-pagination">
+            <a
+              class="search-pager"
+              href="/search?{{ query_string(base_args, page=(page - 1)) }}"
+              aria-disabled="{{ 'true' if page <= 1 else 'false' }}"
+            >Previous</a>
+            <span>{{ page }} / {{ total_pages }}</span>
+            <a
+              class="search-pager"
+              href="/search?{{ query_string(base_args, page=(page + 1)) }}"
+              aria-disabled="{{ 'true' if page >= total_pages else 'false' }}"
+            >Next</a>
+          </div>
+
+          <div class="search-artisan-section">
+            <div class="search-results__header">
+              <h2>Artisan Directory</h2>
+              <span class="search-results__meta">{{ artisans | length }} makers</span>
+            </div>
+
             {% if artisans %}
-              <div class="artisan-grid">
+              <div class="search-artisan-grid" style="margin-top: 16px;">
                 {% for artisan in artisans %}
-                  <article class="artisan">
-                    <div class="artisan__top">
+                  <article class="search-artisan">
+                    <div class="search-artisan__top">
                       <h3>{{ artisan.name }}</h3>
-                      <span class="pill">{{ artisan.category }}</span>
+                      <span class="search-pill">{{ artisan.category }}</span>
                     </div>
-                    <div class="artisan__sub">{{ artisan.sub_category }}</div>
-                    <div class="artisan__meta">
-                      <span>{{ artisan.location }}</span>
-                      {% if artisan.region %}
-                        <span class="dot">•</span>
-                        <span>{{ artisan.region }}</span>
-                      {% endif %}
+                    <div class="search-artisan__sub">{{ artisan.sub_category }}</div>
+                    <div class="search-artisan__meta">
+                      {{ artisan.location }}
+                      {% if artisan.region %} / {{ artisan.region }}{% endif %}
                     </div>
-                    <div class="artisan__ships">
-                      Ships internationally: <strong>{{ artisan.ships_international or 'Check' }}</strong>
+                    <div class="search-artisan__ships">
+                      Ships intl.: {{ artisan.ships_international or 'Check' }}
                     </div>
                     {% if artisan.notes %}
-                      <p class="artisan__notes">{{ artisan.notes }}</p>
+                      <p class="search-artisan__notes">{{ artisan.notes }}</p>
                     {% endif %}
-                    <div class="artisan__links">
+                    <div class="search-artisan__links">
                       {% if artisan.website %}
-                        <a href="{{ artisan.website }}" target="_blank" rel="noopener">Website</a>
+                        <a href="{{ artisan.website }}" target="_blank" rel="noopener">Site</a>
                       {% endif %}
                       {% if artisan.etsy %}
                         <a href="https://www.etsy.com/shop/{{ artisan.etsy }}" target="_blank" rel="noopener">Etsy</a>
@@ -251,14 +232,15 @@
                 {% endfor %}
               </div>
             {% else %}
-              <div class="empty">
-                <h3>No artisans match those filters.</h3>
-                <p>Try removing the category or region filters.</p>
+              <div class="search-empty" style="margin-top: 16px;">
+                <h3>No artisans match</h3>
+                <p>Try removing filters.</p>
               </div>
             {% endif %}
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
     </div>
+
   </body>
 </html>
