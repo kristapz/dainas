@@ -238,12 +238,6 @@ _CURATED_NAMES = {
     "Labietis":                 _DAINA_HONEY,
 }
 
-# Build the highlighted list preserving CSV order
-HIGHLIGHTED_ARTISANS = []
-for _a in ARTISANS:
-    if _a["name"] in _CURATED_NAMES:
-        HIGHLIGHTED_ARTISANS.append({**_a, "daina": _CURATED_NAMES[_a["name"]]})
-
 
 # --- Helpers ---
 
@@ -381,6 +375,11 @@ def _load_artisans(path):
 
 ARTISANS = _load_artisans(ARTISAN_DATA_PATH)
 
+# Build the highlighted list preserving CSV order
+HIGHLIGHTED_ARTISANS = []
+for _a in ARTISANS:
+    if _a["name"] in _CURATED_NAMES:
+        HIGHLIGHTED_ARTISANS.append({**_a, "daina": _CURATED_NAMES[_a["name"]]})
 
 
 def _filter_artisans(artisans, query, category, region, shipping):
