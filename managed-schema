@@ -18,10 +18,10 @@
     <!-- Latviandainas special fields -->
     <!-- use the default version above 
          <field name="id" type="string" indexed="true" stored="true"/> -->
-    <field name="volume_id" type="string" indexed="false" stored="true"/>
-    <field name="parent_head" type="string" indexed="false" stored="true"/>
-    <field name="parent_id" type="string" indexed="false" stored="true"/>
-    <field name="lg_head" type="string" indexed="false" stored="true"/>
+    <field name="volume_id" type="string" indexed="true" stored="true" docValues="true"/>
+    <field name="parent_head" type="string" indexed="true" stored="true" docValues="true"/>
+    <field name="parent_id" type="string" indexed="true" stored="true" docValues="true"/>
+    <field name="lg_head" type="string" indexed="true" stored="true" docValues="true"/>
     <field name="fulltext" type="text_general" indexed="true" stored="true"/>
     <!-- changed to text_general -->
     <!-- end Latviandainas special fields -->

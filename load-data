@@ -76,14 +76,29 @@ EOF
 
 cd /opt/solr/server/etc
 # get the local IP (docker container) to use in the self-signed SSL cert
-theIP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
+if command -v ip >/dev/null 2>&1; then
+  theIP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
+else
+  theIP=$(hostname -i 2>/dev/null | awk '{print $1}')
+fi
+if [ -z "${theIP:-}" ]; then
+  theIP=127.0.0.1
+fi
 echo "Set up a local SSL cert"
-keytool -genkeypair -alias solr-ssl -keyalg RSA -keysize 2048 \
-  -keypass LatvianDainas -storepass LatvianDainas \
-  -validity 9999 -keystore /opt/solr/server/etc/solr-ssl.keystore.jks \
-  -ext SAN=DNS:localhost,IP:127.0.0.1,IP:$theIP \
-  -dname "CN=localhost, OU=Scholars' Lab, O=University of Virginia, L=Charlottesville, ST=VA, C=US"
+if [ ! -f /opt/solr/server/etc/solr-ssl.keystore.jks ]; then
+  keytool -genkeypair -alias solr-ssl -keyalg RSA -keysize 2048 \
+    -keypass LatvianDainas -storepass LatvianDainas \
+    -validity 9999 -keystore /opt/solr/server/etc/solr-ssl.keystore.jks \
+    -ext SAN=DNS:localhost,IP:127.0.0.1,IP:$theIP \
+    -dname "CN=localhost, OU=Scholars' Lab, O=University of Virginia, L=Charlottesville, ST=VA, C=US"
+else
+  echo "SSL keystore already exists; skipping keytool"
+fi
 
-cp /opt/solr/solr.in.sh /opt/solr/bin/solr.in.sh
+if [ -f /opt/solr/solr.in.sh ]; then
+  cp /opt/solr/solr.in.sh /opt/solr/bin/solr.in.sh
+else
+  echo "solr.in.sh not provided; skipping"
+fi
 
 exec solr -f
