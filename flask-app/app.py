@@ -169,52 +169,80 @@ FEATURED_DAINAS = [
     },
 ]
 
-# --- Daina-to-craft pairings (by category keyword) ---
-# These are used to pair real artisans with thematically relevant dainas.
-# Eventually this will be replaced by a RAG engine.
+# --- Curated highlight: 15 artisans, each with a hand-picked daina ---
+# Criteria: daina-relevant craft, commercially shippable, modern but rooted
+# in traditional Latvian craftsmanship. No folk costumes, no directories.
 
-CRAFT_DAINAS = {
-    "Pottery": {
-        "latvian": "Lec, saulīte, drīz augšā,\nNelaid' gaŗu ceļmalīti;\nBārenīši ceļu gāja,\nTiem bij gaŗš ceļmalīts.",
-        "english": "Rise quickly, little sun,\nDo not leave a long twilight;\nOrphans walk the road,\nAnd for them the way is long.",
-        "source": "Kr. Barona Dainu skapis, 33566",
-    },
-    "Textiles": {
-        "latvian": "Saulīt' auda audekliņu\nDeviņiem dzīpariņiem;\nTrīs dzīpari zelta bija,\nSeši vaŗa dzenītiņi.",
-        "english": "The sun wove a cloth\nOf nine fine threads;\nThree threads were golden,\nSix were copper heddles.",
-        "source": "Kr. Barona Dainu skapis, 33998",
-    },
-    "Metalwork/Jewelry": {
-        "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
-        "english": "The smith forged in the sky,\nEmbers fell into the Daugava;\nFrom those embers the river\nBloomed with golden flowers.",
-        "source": "Kr. Barona Dainu skapis, 34067",
-    },
-    "Metalwork/Blacksmith": {
-        "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
-        "english": "The smith forged in the sky,\nEmbers fell into the Daugava;\nFrom those embers the river\nBloomed with golden flowers.",
-        "source": "Kr. Barona Dainu skapis, 34067",
-    },
-    "Woodwork": {
-        "latvian": "Ozols auga uz akmeņa,\nSaknes laida pa ūdeni;\nNe ozolam saules trūka,\nNe sakņu pie ūdentiņa.",
-        "english": "An oak grew upon a stone,\nIts roots spread through the water;\nThe oak lacked neither sun\nNor roots beside the water.",
-        "source": "Kr. Barona Dainu skapis, 35784",
-    },
-    "Food": {
-        "latvian": "Meitu māte linus sēja\nSudrablinu tīrumā;\nDievs dod meitu māmiņai\nSudrabiņa vedekliņu.",
-        "english": "The mother of daughters sowed flax\nIn the field of silver linen;\nGod grant the mother of daughters\nA daughter-in-law of silver.",
-        "source": "Kr. Barona Dainu skapis, 15900",
-    },
+_DAINA_SUN = {
+    "latvian": "Lec, saulīte, drīz augšā,\nNelaid' gaŗu ceļmalīti;\nBārenīši ceļu gāja,\nTiem bij gaŗš ceļmalīts.",
+    "english": "Rise quickly, little sun,\nDo not leave a long twilight;\nOrphans walk the road,\nAnd for them the way is long.",
+    "source": "Kr. Barona Dainu skapis, 33566",
+}
+_DAINA_WEAVE = {
+    "latvian": "Saulīt' auda audekliņu\nDeviņiem dzīpariņiem;\nTrīs dzīpari zelta bija,\nSeši vaŗa dzenītiņi.",
+    "english": "The sun wove a cloth\nOf nine fine threads;\nThree threads were golden,\nSix were copper heddles.",
+    "source": "Kr. Barona Dainu skapis, 33998",
+}
+_DAINA_FLAX = {
+    "latvian": "Meitu māte linus sēja\nSudrablinu tīrumā;\nDievs dod meitu māmiņai\nSudrabiņa vedekliņu.",
+    "english": "The mother of daughters sowed flax\nIn the field of silver linen;\nGod grant the mother\nA daughter-in-law of silver.",
+    "source": "Kr. Barona Dainu skapis, 15900",
+}
+_DAINA_SMITH = {
+    "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
+    "english": "The smith forged in the sky,\nEmbers fell into the Daugava;\nFrom those embers the river\nBloomed with golden flowers.",
+    "source": "Kr. Barona Dainu skapis, 34067",
+}
+_DAINA_OAK = {
+    "latvian": "Ozols auga uz akmeņa,\nSaknes laida pa ūdeni;\nNe ozolam saules trūka,\nNe sakņu pie ūdentiņa.",
+    "english": "An oak grew upon a stone,\nIts roots spread through the water;\nThe oak lacked neither sun\nNor roots beside the water.",
+    "source": "Kr. Barona Dainu skapis, 35784",
+}
+_DAINA_AMBER = {
+    "latvian": "Jūras māte dzintarotu\nKrēslu lika vakarā;\nĒd', dzeŗiet, jūras bērni,\nSēžat dzintarkrēsliņā.",
+    "english": "The mother of the sea set out\nAn amber chair at dusk;\nEat, drink, children of the sea,\nSit in the amber chair.",
+    "source": "Kr. Barona Dainu skapis, 30013",
+}
+_DAINA_HONEY = {
+    "latvian": "Bites, bites, dravenieki,\nNesiet medu ozolā;\nOzolam zelta sakta\nMedainām lapiņām.",
+    "english": "Bees, bees, beekeepers,\nCarry honey to the oak;\nThe oak has a golden brooch\nWith honey-laden leaves.",
+    "source": "Kr. Barona Dainu skapis, 30441",
+}
+_DAINA_BREAD = {
+    "latvian": "Arājiņi, arājiņi,\nKas tos laukus noravēja?\nBaltā maize klētiņā,\nTā tos laukus noravēja.",
+    "english": "Ploughmen, ploughmen,\nWho cleared the fields?\nThe white bread in the granary —\nThat is what cleared the fields.",
+    "source": "Kr. Barona Dainu skapis, 28440",
 }
 
-# Fallback daina for categories without a specific pairing
-_DEFAULT_DAINA = CRAFT_DAINAS["Pottery"]
+_CURATED_NAMES = {
+    # Pottery (2) — earth and fire
+    "Vaidava Ceramics":         _DAINA_SUN,
+    "Dailrade Ceramics":        _DAINA_SUN,
+    # Textiles (3) — weaving, flax, linen
+    "Tines":                    _DAINA_WEAVE,
+    "Hobbywool":                _DAINA_WEAVE,
+    "ETMO Gallery":             _DAINA_FLAX,
+    # Jewelry (2) — celestial smith, amber
+    "Baltu Rotas":              _DAINA_SMITH,
+    "City Amber":               _DAINA_AMBER,
+    # Blacksmith (2) — sky forge
+    "Sun Hill Forge":           _DAINA_SMITH,
+    "John Neeman / Autine Tools": _DAINA_SMITH,
+    # Woodwork (3) — oak, forest
+    "Jānis Straupe":            _DAINA_OAK,
+    "BAWOOD":                   _DAINA_OAK,
+    "Mārtiņa Koku Fabrika":     _DAINA_OAK,
+    # Food (3) — bread, honey, herbs
+    "Lāči Bakery":              _DAINA_BREAD,
+    "Kurland Honey":            _DAINA_HONEY,
+    "Labietis":                 _DAINA_HONEY,
+}
 
-
-def _pair_artisan_with_daina(artisan):
-    """Pair a real artisan with a thematically relevant daina based on craft category."""
-    category = artisan["category"]
-    daina = CRAFT_DAINAS.get(category, _DEFAULT_DAINA)
-    return {**artisan, "daina": daina}
+# Build the highlighted list preserving CSV order
+HIGHLIGHTED_ARTISANS = []
+for _a in ARTISANS:
+    if _a["name"] in _CURATED_NAMES:
+        HIGHLIGHTED_ARTISANS.append({**_a, "daina": _CURATED_NAMES[_a["name"]]})
 
 
 # --- Helpers ---
@@ -353,16 +381,6 @@ def _load_artisans(path):
 
 ARTISANS = _load_artisans(ARTISAN_DATA_PATH)
 
-# Featured artisans: real craft makers (not guilds/directories/markets)
-_CRAFT_CATEGORIES = {
-    "Pottery", "Textiles", "Metalwork/Jewelry", "Metalwork/Blacksmith",
-    "Woodwork", "Woodwork/Toys", "Pottery/Glass", "Textiles/Guild",
-    "Food", "Food/Beverage",
-}
-CRAFT_ARTISANS = [a for a in ARTISANS if a["category"] in _CRAFT_CATEGORIES]
-
-# Highlighted artisans for the landing page — each paired with a daina
-HIGHLIGHTED_ARTISANS = [_pair_artisan_with_daina(a) for a in CRAFT_ARTISANS]
 
 
 def _filter_artisans(artisans, query, category, region, shipping):
