@@ -11,9 +11,8 @@
     <nav class="nav">
       <a href="/" class="nav__logo">Solar Order</a>
       <div class="nav__links">
-        <a href="#objects">Objects</a>
-        <a href="#dainas">Dainas</a>
         <a href="#makers">Makers</a>
+        <a href="#dainas">Dainas</a>
         <a href="/search">Archive</a>
       </div>
     </nav>
@@ -24,9 +23,9 @@
         <p class="hero__kicker">A sovereign Baltic cultural export layer</p>
         <h1 class="hero__title">Solar Order</h1>
         <p class="hero__subtitle">
-          Curated Latvian craft objects rooted in documented Baltic symbolism.
-          Each piece is paired with a cited daina fragment and framed within
-          a solar, land-bound, cyclical cosmology.
+          Latvian artisans paired with the dainas that carry their craft tradition.
+          Ceramics, textiles, metalwork, wood — each rooted in documented Baltic
+          symbolism and framed within a solar, land-bound, cyclical cosmology.
         </p>
         <div class="hero__rule"></div>
         <p class="hero__credo">
@@ -50,35 +49,46 @@
 
     <div class="divider"><div class="container"><hr /></div></div>
 
-    <section id="objects" class="section">
+    <section id="makers" class="section">
       <div class="container">
         <div class="section__header">
-          <span class="section__kicker">Curated</span>
-          <h2 class="section__title">Objects</h2>
+          <span class="section__kicker">Latvian artisans</span>
+          <h2 class="section__title">Makers &amp; Their Dainas</h2>
           <p class="section__desc">
-            Limited, heirloom-level objects from Latvian artisans.
-            Each paired with a specific daina from the Kr. Barona collection.
+            Real workshops, studios, and cooperatives maintaining Baltic craft traditions.
+            Each paired with a daina from the Kr. Barona collection that speaks to their material practice.
           </p>
         </div>
 
-        <div class="objects-grid">
-          {% for obj in objects %}
-          <article class="object-card">
-            <div class="object-card__visual">
-              <span class="object-card__category">{{ obj.category }}</span>
+        <div class="makers-grid">
+          {% for artisan in highlighted %}
+          <article class="maker-card">
+            <div class="maker-card__head">
+              <span class="maker-card__craft">{{ artisan.category }}</span>
+              {% if artisan.region %}
+                <span class="maker-card__region">{{ artisan.region }}</span>
+              {% endif %}
             </div>
-            <div class="object-card__body">
-              <h3 class="object-card__name">{{ obj.name }}</h3>
-              <p class="object-card__price">${{ obj.price }}</p>
-              <p class="object-card__desc">{{ obj.description }}</p>
-              <div class="object-card__daina">
-                <p class="object-card__daina-text">{{ obj.daina.english }}</p>
-                <span class="object-card__daina-source">{{ obj.daina.source }}</span>
-              </div>
-              <div class="object-card__maker">
-                <span>{{ obj.artisan }}</span>
-                <span class="object-card__location">{{ obj.location }}</span>
-              </div>
+            <h3 class="maker-card__name">{{ artisan.name }}</h3>
+            <p class="maker-card__sub">{{ artisan.sub_category }}</p>
+            <p class="maker-card__location">{{ artisan.location }}</p>
+            {% if artisan.notes %}
+              <p class="maker-card__notes">{{ artisan.notes }}</p>
+            {% endif %}
+            <div class="maker-card__daina">
+              <p class="maker-card__daina-text">{{ artisan.daina.english }}</p>
+              <span class="maker-card__daina-source">{{ artisan.daina.source }}</span>
+            </div>
+            <div class="maker-card__links">
+              {% if artisan.website %}
+                <a href="{{ artisan.website }}" target="_blank" rel="noopener">Site</a>
+              {% endif %}
+              {% if artisan.etsy %}
+                <a href="{{ artisan.etsy }}" target="_blank" rel="noopener">Etsy</a>
+              {% endif %}
+              {% if artisan.instagram %}
+                <a href="https://instagram.com/{{ artisan.instagram | replace('@','') }}" target="_blank" rel="noopener">Instagram</a>
+              {% endif %}
             </div>
           </article>
           {% endfor %}
@@ -124,42 +134,6 @@
 
     <div class="divider"><div class="container"><hr /></div></div>
 
-    <section id="makers" class="section">
-      <div class="container">
-        <div class="section__header">
-          <span class="section__kicker">Latvian workshops</span>
-          <h2 class="section__title">Makers</h2>
-          <p class="section__desc">
-            Every object originates from a documented Latvian artisan.
-            Studios, workshops, and cooperatives maintaining material traditions.
-          </p>
-        </div>
-
-        <div class="makers-grid">
-          {% for artisan in artisans %}
-          <article class="maker-card">
-            <h3 class="maker-card__name">{{ artisan.name }}</h3>
-            <p class="maker-card__category">{{ artisan.sub_category or artisan.category }}</p>
-            <p class="maker-card__location">{{ artisan.location }}</p>
-            <div class="maker-card__links">
-              {% if artisan.website %}
-                <a href="{{ artisan.website }}" target="_blank" rel="noopener">Site</a>
-              {% endif %}
-              {% if artisan.etsy %}
-                <a href="{{ artisan.etsy }}" target="_blank" rel="noopener">Etsy</a>
-              {% endif %}
-              {% if artisan.instagram %}
-                <a href="https://instagram.com/{{ artisan.instagram | replace('@','') }}" target="_blank" rel="noopener">Instagram</a>
-              {% endif %}
-            </div>
-          </article>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"><div class="container"><hr /></div></div>
-
     <section class="section section--philosophy">
       <div class="container">
         <div class="philosophy">
@@ -170,9 +144,9 @@
               Replacing abstract consumption with land-rooted objects.
             </p>
             <p>
-              Each object carries documented lineage: the artisan who made it,
-              the region it comes from, the daina that accompanies it,
-              and the solar season in which it is offered.
+              Each artisan carries documented lineage: who they are,
+              the region they work in, the daina that accompanies their craft,
+              and the solar season in which their work is offered.
             </p>
             <p>
               This is not a shop. It is a cultural export layer.
@@ -191,9 +165,8 @@
             <span class="footer__origin">Riga, Latvia</span>
           </div>
           <div class="footer__links">
-            <a href="#objects">Objects</a>
-            <a href="#dainas">Dainas</a>
             <a href="#makers">Makers</a>
+            <a href="#dainas">Dainas</a>
             <a href="/search">Archive</a>
           </div>
         </div>

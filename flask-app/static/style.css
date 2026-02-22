@@ -259,106 +259,7 @@ hr {
   color: var(--fg-muted);
 }
 
-/* --- Object Cards --- */
-
-.objects-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-}
-
-.object-card {
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-}
-
-.object-card__visual {
-  padding: 32px 24px;
-  background: var(--surface);
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  min-height: 140px;
-}
-
-.object-card__category {
-  font-family: var(--font-sans);
-  font-size: 0.6rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-
-.object-card__body {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.object-card__name {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  margin-bottom: 4px;
-}
-
-.object-card__price {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--accent);
-  letter-spacing: 0.06em;
-  margin-bottom: 16px;
-}
-
-.object-card__desc {
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--fg-muted);
-  margin-bottom: 20px;
-}
-
-.object-card__daina {
-  border-top: 1px solid var(--border-light);
-  padding-top: 16px;
-  margin-bottom: 16px;
-  flex: 1;
-}
-
-.object-card__daina-text {
-  font-style: italic;
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--fg);
-  margin-bottom: 6px;
-}
-
-.object-card__daina-source {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  color: var(--fg-muted);
-}
-
-.object-card__maker {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--fg-muted);
-  border-top: 1px solid var(--border-light);
-  padding-top: 14px;
-}
-
-.object-card__location {
-  text-align: right;
-}
+/* --- Maker Cards (with daina pairing) --- */
 
 /* --- Daina Cards --- */
 
@@ -437,32 +338,89 @@ hr {
 .maker-card {
   background: var(--bg);
   padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.maker-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.maker-card__craft {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.maker-card__region {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
 }
 
 .maker-card__name {
   font-family: var(--font-serif);
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 400;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
-.maker-card__category {
-  font-size: 0.85rem;
+.maker-card__sub {
+  font-size: 0.88rem;
   color: var(--fg-muted);
   margin-bottom: 4px;
+  line-height: 1.5;
 }
 
 .maker-card__location {
   font-family: var(--font-sans);
   font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+}
+
+.maker-card__notes {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.maker-card__daina {
+  border-top: 1px solid var(--border-light);
+  padding-top: 14px;
+  margin-top: auto;
+  margin-bottom: 14px;
+}
+
+.maker-card__daina-text {
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--fg);
+  margin-bottom: 6px;
+}
+
+.maker-card__daina-source {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   color: var(--fg-muted);
-  margin-bottom: 12px;
 }
 
 .maker-card__links {
   display: flex;
   gap: 16px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 14px;
 }
 
 .maker-card__links a {
@@ -562,10 +520,6 @@ hr {
 /* --- Responsive --- */
 
 @media (max-width: 900px) {
-  .objects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .makers-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -596,10 +550,6 @@ hr {
 
   .hero__subtitle {
     font-size: 0.95rem;
-  }
-
-  .objects-grid {
-    grid-template-columns: 1fr;
   }
 
   .dainas-list {

@@ -169,100 +169,52 @@ FEATURED_DAINAS = [
     },
 ]
 
-# --- Curated objects ---
+# --- Daina-to-craft pairings (by category keyword) ---
+# These are used to pair real artisans with thematically relevant dainas.
+# Eventually this will be replaced by a RAG engine.
 
-CURATED_OBJECTS = [
-    {
-        "name": "Solar Vessel",
-        "price": 300,
-        "description": "Hand-thrown red clay pot. Wood-fired in a rural Vidzeme kiln. "
-        "The surface carries marks of direct flame. "
-        "Paired with a midsummer daina referencing the sun crossing water.",
-        "category": "Ceramics",
-        "artisan": "Vaidava Ceramics",
-        "location": "Vaidava, Vidzeme",
-        "daina": {
-            "latvian": "Lec, saulīte, drīz augšā,\nNelaid' gaŗu ceļmalīti;\nBārenīši ceļu gāja,\nTiem bij gaŗš ceļmalīts.",
-            "english": "Rise quickly, little sun, / Do not leave a long twilight.",
-            "source": "Kr. Barona Dainu skapis, 33566",
-        },
+CRAFT_DAINAS = {
+    "Pottery": {
+        "latvian": "Lec, saulīte, drīz augšā,\nNelaid' gaŗu ceļmalīti;\nBārenīši ceļu gāja,\nTiem bij gaŗš ceļmalīts.",
+        "english": "Rise quickly, little sun,\nDo not leave a long twilight;\nOrphans walk the road,\nAnd for them the way is long.",
+        "source": "Kr. Barona Dainu skapis, 33566",
     },
-    {
-        "name": "Nine-Thread Cloth",
-        "price": 240,
-        "description": "Hand-woven linen cloth on a restored 1930s loom. "
-        "Natural plant dyes. Geometric sun pattern. "
-        "Paired with a daina of the sun weaving cloth of nine threads.",
-        "category": "Textiles",
-        "artisan": "ETMO Gallery",
-        "location": "Riga",
-        "daina": {
-            "latvian": "Saulīt' auda audekliņu\nDeviņiem dzīpariņiem;\nTrīs dzīpari zelta bija,\nSeši vaŗa dzenītiņi.",
-            "english": "The sun wove a cloth / Of nine fine threads.",
-            "source": "Kr. Barona Dainu skapis, 33998",
-        },
+    "Textiles": {
+        "latvian": "Saulīt' auda audekliņu\nDeviņiem dzīpariņiem;\nTrīs dzīpari zelta bija,\nSeši vaŗa dzenītiņi.",
+        "english": "The sun wove a cloth\nOf nine fine threads;\nThree threads were golden,\nSix were copper heddles.",
+        "source": "Kr. Barona Dainu skapis, 33998",
     },
-    {
-        "name": "Sky-Forge Brooch",
-        "price": 185,
-        "description": "Hand-cast bronze sakta in the form of the solar cross. "
-        "Finished with patina. Based on 9th-century Latgalian originals. "
-        "Paired with a daina of the celestial smith.",
-        "category": "Metalwork",
-        "artisan": "Baltu Rotas",
-        "location": "Sigulda, Vidzeme",
-        "daina": {
-            "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
-            "english": "The smith forged in the sky, / Embers fell into the Daugava.",
-            "source": "Kr. Barona Dainu skapis, 34067",
-        },
+    "Metalwork/Jewelry": {
+        "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
+        "english": "The smith forged in the sky,\nEmbers fell into the Daugava;\nFrom those embers the river\nBloomed with golden flowers.",
+        "source": "Kr. Barona Dainu skapis, 34067",
     },
-    {
-        "name": "Silver-Linen Belt",
-        "price": 160,
-        "description": "Woven josta using traditional Latvian geometric patterns. "
-        "Wool and linen. Width follows ethnographic proportions. "
-        "Paired with a daina of flax sown in a silver field.",
-        "category": "Textiles",
-        "artisan": "Senā Klēts",
-        "location": "Riga",
-        "daina": {
-            "latvian": "Meitu māte linus sēja\nSudrablinu tīrumā;\nDievs dod meitu māmiņai\nSudrabiņa vedekliņu.",
-            "english": "The mother of daughters sowed flax / In the field of silver linen.",
-            "source": "Kr. Barona Dainu skapis, 15900",
-        },
+    "Metalwork/Blacksmith": {
+        "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
+        "english": "The smith forged in the sky,\nEmbers fell into the Daugava;\nFrom those embers the river\nBloomed with golden flowers.",
+        "source": "Kr. Barona Dainu skapis, 34067",
     },
-    {
-        "name": "Oak-Root Board",
-        "price": 120,
-        "description": "Bread board carved from Latvian oak. "
-        "Hand-finished with beeswax. The grain follows the tree's growth. "
-        "Paired with a daina of the oak growing on stone.",
-        "category": "Woodwork",
-        "artisan": "BAWOOD",
-        "location": "Launkalne, Latvia",
-        "daina": {
-            "latvian": "Ozols auga uz akmeņa,\nSaknes laida pa ūdeni;\nNe ozolam saules trūka,\nNe sakņu pie ūdentiņa.",
-            "english": "An oak grew upon a stone, / Its roots spread through the water.",
-            "source": "Kr. Barona Dainu skapis, 35784",
-        },
+    "Woodwork": {
+        "latvian": "Ozols auga uz akmeņa,\nSaknes laida pa ūdeni;\nNe ozolam saules trūka,\nNe sakņu pie ūdentiņa.",
+        "english": "An oak grew upon a stone,\nIts roots spread through the water;\nThe oak lacked neither sun\nNor roots beside the water.",
+        "source": "Kr. Barona Dainu skapis, 35784",
     },
-    {
-        "name": "Ember Ring",
-        "price": 95,
-        "description": "Forged iron ring with copper inlay. "
-        "Made at a rural forge using traditional bellows. "
-        "Paired with a daina of the smith who forges in the heavens.",
-        "category": "Metalwork",
-        "artisan": "Sun Hill Forge",
-        "location": "Northern Latvia",
-        "daina": {
-            "latvian": "Kalējs kala debesīs,\nOgles bira Daugavā;\nNo oglēm Daugaviņa\nZelta ziediem noziedēja.",
-            "english": "The smith forged in the sky, / Embers fell into the Daugava.",
-            "source": "Kr. Barona Dainu skapis, 34067",
-        },
+    "Food": {
+        "latvian": "Meitu māte linus sēja\nSudrablinu tīrumā;\nDievs dod meitu māmiņai\nSudrabiņa vedekliņu.",
+        "english": "The mother of daughters sowed flax\nIn the field of silver linen;\nGod grant the mother of daughters\nA daughter-in-law of silver.",
+        "source": "Kr. Barona Dainu skapis, 15900",
     },
-]
+}
+
+# Fallback daina for categories without a specific pairing
+_DEFAULT_DAINA = CRAFT_DAINAS["Pottery"]
+
+
+def _pair_artisan_with_daina(artisan):
+    """Pair a real artisan with a thematically relevant daina based on craft category."""
+    category = artisan["category"]
+    daina = CRAFT_DAINAS.get(category, _DEFAULT_DAINA)
+    return {**artisan, "daina": daina}
 
 
 # --- Helpers ---
@@ -401,10 +353,16 @@ def _load_artisans(path):
 
 ARTISANS = _load_artisans(ARTISAN_DATA_PATH)
 
-# Featured artisans for the landing page (real artisans who make craft objects)
-FEATURED_ARTISANS = [a for a in ARTISANS if a["category"] in (
-    "Pottery", "Textiles", "Metalwork/Jewelry", "Metalwork/Blacksmith", "Woodwork"
-) and a["ships_flag"]]
+# Featured artisans: real craft makers (not guilds/directories/markets)
+_CRAFT_CATEGORIES = {
+    "Pottery", "Textiles", "Metalwork/Jewelry", "Metalwork/Blacksmith",
+    "Woodwork", "Woodwork/Toys", "Pottery/Glass", "Textiles/Guild",
+    "Food", "Food/Beverage",
+}
+CRAFT_ARTISANS = [a for a in ARTISANS if a["category"] in _CRAFT_CATEGORIES]
+
+# Highlighted artisans for the landing page — each paired with a daina
+HIGHLIGHTED_ARTISANS = [_pair_artisan_with_daina(a) for a in CRAFT_ARTISANS]
 
 
 def _filter_artisans(artisans, query, category, region, shipping):
@@ -469,8 +427,7 @@ def index():
         "index.html",
         season=season,
         dainas=FEATURED_DAINAS,
-        objects=CURATED_OBJECTS,
-        artisans=FEATURED_ARTISANS[:12],
+        highlighted=HIGHLIGHTED_ARTISANS,
     )
 
 
